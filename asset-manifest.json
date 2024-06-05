@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/UpdatedCibcbank/static/css/main.03901ca2.css",
+    "main.js": "/UpdatedCibcbank/static/js/main.9bf6e8ab.js",
+    "static/media/cibc-0224-ph-2-transformed.webp": "/UpdatedCibcbank/static/media/cibc-0224-ph-2-transformed.e63fd544dd74622c1192.webp",
+    "static/media/img1.webp": "/UpdatedCibcbank/static/media/img1.a89032f20edea27f0a2f.webp",
+    "static/media/cq5dam.web.1280.1280.avif": "/UpdatedCibcbank/static/media/cq5dam.web.1280.1280.72ce56ea5d558f2032f9.avif",
+    "static/media/cq5dam.thumbnail.319.319.avif": "/UpdatedCibcbank/static/media/cq5dam.thumbnail.319.319.01d1035f28aa9bcf537d.avif",
+    "static/media/CIBC_logo_2021.svg": "/UpdatedCibcbank/static/media/CIBC_logo_2021.621a536efee1728d497cb83b5b85a834.svg",
+    "index.html": "/UpdatedCibcbank/index.html",
+    "main.03901ca2.css.map": "/UpdatedCibcbank/static/css/main.03901ca2.css.map",
+    "main.9bf6e8ab.js.map": "/UpdatedCibcbank/static/js/main.9bf6e8ab.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.03901ca2.css",
+    "static/js/main.9bf6e8ab.js"
+  ]
+}
