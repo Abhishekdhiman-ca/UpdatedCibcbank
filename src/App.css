@@ -1,0 +1,49 @@
+.logo-animation {
+  transition: transform 0.3s ease;
+}
+
+.logo-animation:hover {
+  transform: scale(1.1);
+}
+
+.nav-link {
+  position: relative;
+  color: #f8f9fa;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #f8f9fa;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.shake-animation {
+  color: #c11010;
+  transition: transform 0.2s ease;
+}
+
+.shake-animation:hover {
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
