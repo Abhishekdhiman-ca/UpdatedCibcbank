@@ -60,18 +60,6 @@ const TransactionForm = ({ type, onSubmit }) => {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="amount" className="form-label fw-bold">Amount</label>
-            <input
-              type="number"
-              id="amount"
-              className={`form-control ${formErrors.amount ? 'is-invalid' : ''}`}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
-            {formErrors.amount && <div className="invalid-feedback">{formErrors.amount}</div>}
-          </div>
-          <div className="mb-4">
             <label className="form-label fw-bold">Account Type</label>
             <div className="d-flex justify-content-center">
               <div className="btn-group" role="group">
@@ -125,6 +113,18 @@ const TransactionForm = ({ type, onSubmit }) => {
               {formErrors.selectedContact && <div className="invalid-feedback">{formErrors.selectedContact}</div>}
             </div>
           )}
+          <div className="mb-4">
+            <label htmlFor="amount" className="form-label fw-bold">Amount</label>
+            <input
+              type="number"
+              id="amount"
+              className={`form-control ${formErrors.amount ? 'is-invalid' : ''}`}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+            />
+            {formErrors.amount && <div className="invalid-feedback">{formErrors.amount}</div>}
+          </div>
           <div className="text-center">
             <button type="submit" className="btn btn-danger btn-lg px-5">
               {type === 'deposit' ? 'Deposit' : type === 'withdraw' ? 'Withdraw' : 'Transfer'}
