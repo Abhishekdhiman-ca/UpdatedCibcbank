@@ -1,4 +1,3 @@
-// TransactionForm.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -31,6 +30,9 @@ const TransactionForm = ({ type, onSubmit }) => {
     const errors = {};
     if (!amount.trim() || isNaN(amount) || amount <= 0) {
       errors.amount = 'Enter a valid amount.';
+    }
+    if (type === 'etransfer' && !selectedContact) {
+      errors.selectedContact = 'Please select a contact.';
     }
     return errors;
   };
@@ -109,7 +111,7 @@ const TransactionForm = ({ type, onSubmit }) => {
               <label htmlFor="contact" className="form-label fw-bold">Select Contact</label>
               <select
                 id="contact"
-                className="form-select"
+                className={`form-select ${formErrors.selectedContact ? 'is-invalid' : ''}`}
                 value={selectedContact}
                 onChange={(e) => setSelectedContact(e.target.value)}
                 required
@@ -120,6 +122,7 @@ const TransactionForm = ({ type, onSubmit }) => {
                   </option>
                 ))}
               </select>
+              {formErrors.selectedContact && <div className="invalid-feedback">{formErrors.selectedContact}</div>}
             </div>
           )}
           <div className="text-center">

@@ -9,11 +9,10 @@ import {
 import Navbar from "./components/Navbar";
 import HomePage from "./components/HomePage";
 import TransactionForm from "./components/TransactionForm";
-import ETransferForm from "./components/ETransferForm";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Footer from "./components/Footer";
-import Dashboard from "./components/Dashboard"; // Import the new Dashboard component
+import Dashboard from "./components/Dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
@@ -36,18 +35,6 @@ const App = () => {
   const [transactions, setTransactions] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const contacts = [
-    "Abhishek Dhiman",
-    "Sukhjeet Singh",
-    "Arpan Silwal",
-    "Nawaz Chowdhry",
-    "Surjeet Singh",
-    "Sejal Josan",
-    "Nabdeep Kaur",
-    "Jasdeep Kaur",
-    "Riya Mankotia",
-  ];
-
   useEffect(() => {
     const authState = localStorage.getItem("isAuthenticated");
     if (authState) {
@@ -57,12 +44,22 @@ const App = () => {
         loadTransactions(accountNumber);
       }
     }
-
-    const lastVisitedRoute = localStorage.getItem("lastVisitedRoute");
-    if (lastVisitedRoute) {
-      window.history.replaceState(null, "", lastVisitedRoute);
-    }
   }, []);
+
+  const handleLogin = (accountNumber) => {
+    setIsAuthenticated(true);
+    localStorage.setItem("isAuthenticated", true);
+    localStorage.setItem("accountNumber", accountNumber);
+    loadTransactions(accountNumber); // Load transactions for logged-in user
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("accountNumber");
+    setTransactions([]); // Clear transactions on logout
+    setBalances({ checking: 0, savings: 0, creditCard: 0, investment: 0 }); // Reset balances
+  };
 
   const saveTransactionToAPI = async (transaction) => {
     try {
@@ -85,7 +82,7 @@ const App = () => {
             Name: "Transaction",
             Creator: {
               "@type": "UserAccount",
-              Identifier: localStorage.getItem("accountId"), // Use the account ID
+              Identifier: localStorage.getItem("accountId"),
             },
             About: {
               "@type": "Transaction",
@@ -126,7 +123,7 @@ const App = () => {
               "@type": "DataLakeItem",
               Creator: {
                 "@type": "UserAccount",
-                Identifier: localStorage.getItem("accountId"), // Use the account ID
+                Identifier: localStorage.getItem("accountId"),
               },
               About: {
                 "@type": "Transaction",
@@ -188,7 +185,7 @@ const App = () => {
               "@type": "DataLakeItem",
               Creator: {
                 "@type": "UserAccount",
-                Identifier: localStorage.getItem("accountId"), // Use the account ID
+                Identifier: localStorage.getItem("accountId"),
               },
               About: {
                 "@type": "Transaction",
@@ -209,20 +206,21 @@ const App = () => {
     }
   };
 
-  const handleTransaction = ({ amount, type, accountType }) => {
+  const handleTransaction = ({ amount, type, accountType, contact }) => {
     const accountNumber = localStorage.getItem("accountNumber");
     const transaction = {
       type,
       accountNumber,
       amount,
       accountType,
+      contact,
       timestamp: new Date().toLocaleString(),
     };
 
     let newBalance;
     if (type === "deposit") {
       newBalance = balances[accountType] + amount;
-    } else if (type === "withdraw") {
+    } else if (type === "withdraw" || type === "etransfer") {
       if (balances[accountType] < amount) {
         alert("Insufficient balance");
         return;
@@ -236,48 +234,7 @@ const App = () => {
     });
 
     setTransactions((prevTransactions) => [...prevTransactions, transaction]);
-    saveTransactionToAPI(transaction); // Save transaction to API
-  };
-
-  const handleETransfer = ({ fromAccount, toContact, amount }) => {
-    const accountNumber = localStorage.getItem("accountNumber");
-    if (balances[fromAccount] < amount) {
-      alert("Insufficient balance");
-      return;
-    }
-
-    const newBalance = balances[fromAccount] - amount;
-
-    const transaction = {
-      type: "etransfer",
-      accountNumber, // Use account number from local storage
-      amount,
-      accountType: fromAccount,
-      timestamp: new Date().toLocaleString(),
-    };
-
-    setBalances({
-      ...balances,
-      [fromAccount]: newBalance,
-    });
-
-    setTransactions((prevTransactions) => [...prevTransactions, transaction]);
-    saveTransactionToAPI(transaction); // Save transaction to API
-  };
-
-  const handleLogin = (accountNumber) => {
-    setIsAuthenticated(true);
-    localStorage.setItem("isAuthenticated", true);
-    localStorage.setItem("accountNumber", accountNumber);
-    loadTransactions(accountNumber); // Load transactions for logged-in user
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("accountNumber"); // Clear account number on logout
-    setTransactions([]); // Clear transactions on logout
-    setBalances({ checking: 0, savings: 0, creditCard: 0, investment: 0 }); // Reset balances
+    saveTransactionToAPI(transaction);
   };
 
   const ProtectedRoute = ({ element }) => {
@@ -305,7 +262,7 @@ const App = () => {
               path="/"
               element={
                 isAuthenticated ? <Navigate to="/home" /> : <Dashboard />
-              } // Redirect to home if authenticated, otherwise show Dashboard
+              }
             />
             <Route
               path="/home"
@@ -344,7 +301,7 @@ const App = () => {
               path="/etransfer"
               element={
                 <ProtectedRoute
-                  element={<ETransferForm contacts={contacts} onSubmit={handleETransfer} />}
+                  element={<TransactionForm type="etransfer" onSubmit={handleTransaction} />}
                 />
               }
             />

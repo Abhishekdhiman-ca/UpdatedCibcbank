@@ -57,9 +57,9 @@ const SignUp = () => {
         }),
       });
       const data = await response.json();
-      const users = data.Result.ItemListElement
-        .map((item) => item.Item)
-        .filter((item) => item.About["@type"] === "UserAccount");
+      const users = data.Result.ItemListElement.map((item) => item.Item).filter(
+        (item) => item.About["@type"] === "UserAccount"
+      );
       setRegisteredUsers(users);
     } catch (error) {
       console.error("Error loading users:", error);
@@ -80,7 +80,8 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) { // Check if passwords match
+    if (password !== confirmPassword) {
+      // Check if passwords match
       setMessage("Passwords do not match");
       return;
     }
@@ -282,15 +283,16 @@ const SignUp = () => {
                 {message && (
                   <div
                     className={`alert ${
-                      message.includes("successful") || message.includes("Passwords do not match")
-                        ? "alert-danger"
-                        : "alert-success"
+                      message.includes("successful")
+                        ? "alert-success"
+                        : "alert-danger"
                     }`}
                     role="alert"
                   >
                     {message}
                   </div>
                 )}
+
                 <button type="submit" className="btn btn-dark btn-lg mb-4 px-5">
                   Sign Up
                 </button>
