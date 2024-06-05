@@ -260,56 +260,62 @@ const App = () => {
           <Routes>
             <Route
               path="/"
-              element={
-                isAuthenticated ? <Navigate to="/home" /> : <Dashboard />
-              }
-            />
-            <Route
-              path="/home"
-              element={
-                <ProtectedRoute
-                  element={
-                    <HomePage
-                      balances={balances}
-                      transactions={transactions}
-                      onLoadTransactions={loadTransactions}
-                      onClearTransactions={clearTransactions}
-                      firstName={localStorage.getItem("firstName")}
-                      lastName={localStorage.getItem("lastName")}
-                    />
-                  }
-                />
-              }
-            />
-            <Route
-              path="/deposit"
-              element={
-                <ProtectedRoute
-                  element={<TransactionForm type="deposit" onSubmit={handleTransaction} />}
-                />
-              }
-            />
-            <Route
-              path="/withdraw"
-              element={
-                <ProtectedRoute
-                  element={<TransactionForm type="withdraw" onSubmit={handleTransaction} />}
-                />
-              }
-            />
-            <Route
-              path="/etransfer"
-              element={
-                <ProtectedRoute
-                  element={<TransactionForm type="etransfer" onSubmit={handleTransaction} />}
-                />
-              }
+              element={isAuthenticated ? <Navigate to="/home" /> : <Dashboard />}
             />
             <Route
               path="/login"
               element={<Login onLogin={handleLogin} isAuthenticated={isAuthenticated} />}
             />
             <Route path="/signup" element={<SignUp />} />
+            {isAuthenticated && (
+              <>
+                <Route
+                  path="/home"
+                  element={
+                    <ProtectedRoute
+                      element={
+                        <HomePage
+                          balances={balances}
+                          transactions={transactions}
+                          onLoadTransactions={loadTransactions}
+                          onClearTransactions={clearTransactions}
+                          firstName={localStorage.getItem("firstName")}
+                          lastName={localStorage.getItem("lastName")}
+                        />
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/deposit"
+                  element={
+                    <ProtectedRoute
+                      element={<TransactionForm type="deposit" onSubmit={handleTransaction} />}
+                    />
+                  }
+                />
+                <Route
+                  path="/withdraw"
+                  element={
+                    <ProtectedRoute
+                      element={<TransactionForm type="withdraw" onSubmit={handleTransaction} />}
+                    />
+                  }
+                />
+                <Route
+                  path="/etransfer"
+                  element={
+                    <ProtectedRoute
+                      element={<TransactionForm type="etransfer" onSubmit={handleTransaction} />}
+                    />
+                  }
+                />
+                <Route path="*" element={<Navigate to="/home" />} />
+              </>
+            )}
+            {!isAuthenticated && (
+              <Route path="*" element={<Navigate to="/" />} />
+            )}
           </Routes>
         </div>
         <Footer />
